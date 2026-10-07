@@ -68,10 +68,11 @@ class DoublyLinkedList:
         if self.head is None:
             print('ERRORRRRRR')
             return
-        new_head = self.head
-        self.head = self.head.next
-        new_head.next = None   #this will remove the connections but the node will be in memory 
-        del new_head          #now this will ensure the node is removed from memory also 
+        old_head = self.head
+        self.head = old_head.next
+        if self.head is not None:
+            self.head.prev = None
+        old_head.next = None
 # deletion at the end
 
     def delete_at_end(self):
@@ -86,9 +87,8 @@ class DoublyLinkedList:
             curr = curr.next
 
         del_node = curr.next
-        curr.next.prev = None
         curr.next = None
-        del del_node  
+        del_node.prev = None
 
 # counting no of nodes in the linked list
 
@@ -103,17 +103,27 @@ class DoublyLinkedList:
         a = count+1
         return a
 
-    def delete_at_pos(self):
-        if pos == -1:
-            print('EROORRR')
+    def delete_at_pos(self, pos):
+        if self.head is None or pos < 0:
+            print('ERROR')
             return
         if pos == 0:
-            self.head = None
+            self.delete_at_start()
             return
-        for i in range(0, a-1):
-            
 
-        
+        curr = self.head
+        for _ in range(pos):
+            if curr is None:
+                print('ERROR')
+                return
+            curr = curr.next
+
+        if curr is None:
+            print('ERROR')
+            return
+        curr.prev.next = curr.next
+        if curr.next is not None:
+            curr.next.prev = curr.prev
 
 
 
@@ -140,7 +150,6 @@ dll.Traverse()
 dll.delete_at_end()
 dll.Traverse()
 print(dll.count_nodes())
-
 
 
 
